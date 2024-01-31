@@ -1,31 +1,27 @@
-import * as React from 'react';
+import React from 'react';
+import { View, Text, Button } from 'react-native';
+import ContactModule from 'react-native-contact-select'; // Adjust the path accordingly
 
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-contact-select';
+function ContactSelector() {
+  const handleContactSelection = (error: any, phoneNumber: any) => {
+    if (error) {
+      console.error(error);
+    } else {
+      console.log('Selected phone number:', phoneNumber);
+      // Do something with the selected contact information
+    }
+  };
 
-export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
+  const pickContact = () => {
+    ContactModule.pickContact(handleContactSelection);
+  };
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
+    <View>
+      <Text>Contact Selector</Text>
+      <Button title="Pick Contact" onPress={pickContact} />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});
+export default ContactSelector;

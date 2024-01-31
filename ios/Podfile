@@ -1,0 +1,34 @@
+platform :ios, '9.0'
+
+use_frameworks!
+
+target 'react-native-contact-select' do
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+    'Core',
+    'CxxBridge',
+    'DevSupport',
+    'RCTText',
+    'RCTNetwork',
+    'RCTWebSocket',
+    'RCTLinkingIOS',
+    'RCTSettings',
+  ]
+
+  pod 'React/RCTImage'
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+
+  pod 'React/Core', :path => '../node_modules/react-native/React'
+  pod 'React/RCTActionSheet', :path => '../node_modules/react-native/Libraries/ActionSheetIOS'
+  pod 'React/RCTAnimation', :path => '../node_modules/react-native/Libraries/NativeAnimation'
+  pod 'React/RCTBlob', :path => '../node_modules/react-native/Libraries/Blob'
+  pod 'React/RCTCameraRoll', :path => '../node_modules/react-native/Libraries/CameraRoll'
+  pod 'React/RCTGeolocation', :path => '../node_modules/react-native/Libraries/Geolocation'
+  pod 'React/RCTImage', :path => '../node_modules/react-native/Libraries/Image'
+  pod 'React/RCTNetwork', :path => '../node_modules/react-native/Libraries/Network'
+  pod 'React/RCTSettings', :path => '../node_modules/react-native/Libraries/Settings'
+  pod 'React/RCTText', :path => '../node_modules/react-native/Libraries/Text'
+  pod 'React/RCTVibration', :path => '../node_modules/react-native/Libraries/Vibration'
+  pod 'React/RCTWebSocket', :path => '../node_modules/react-native/Libraries/WebSocket'
+  
+  pod 'ContactSelect', :path => './'
+end

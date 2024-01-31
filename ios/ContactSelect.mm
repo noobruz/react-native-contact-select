@@ -1,14 +1,37 @@
-#import <React/RCTBridgeModule.h>
+#import "ContactSelect-Bridging-Header.h"
 
-@interface RCT_EXTERN_MODULE(ContactSelect, NSObject)
+@implementation ContactSelect
 
-RCT_EXTERN_METHOD(multiply:(float)a withB:(float)b
-                 withResolver:(RCTPromiseResolveBlock)resolve
-                 withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_MODULE();
 
-+ (BOOL)requiresMainQueueSetup
+RCT_EXPORT_METHOD(pickContact:(RCTResponseSenderBlock)callback)
 {
-  return NO;
+  dispatch_async(dispatch_get_main_queue(), ^{
+    CNContactPickerViewController *contactPicker = [[CNContactPickerViewController alloc] init];
+    contactPicker.delegate = self;
+
+    UIViewController *rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
+    [rootViewController presentViewController:contactPicker animated:YES completion:nil];
+
+    // Save the callback for later use
+    self.contactSelectionCallback = callback;
+  });
+}
+
+- (void)contactPicker:(CNContactPickerViewController *)picker didSelectContact:(CNContact *)contact
+{
+  NSString *phoneNumber = @"";
+  for (CNLabeledValue<CNPhoneNumber *> *phone in contact.phoneNumbers) {
+    phoneNumber = [phone.value stringValue];
+    break; // Use the first phone number, you can modify this based on your requirements
+  }
+
+  [self.contactSelectionCallback @[[NSNull null], phoneNumber]];
+}
+
+- (void)contactPickerDidCancel:(CNContactPickerViewController *)picker
+{
+  [self.contactSelectionCallback @[@"Contact selection canceled"]];
 }
 
 @end

@@ -17,6 +17,10 @@ const ContactSelect = NativeModules.ContactSelect
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return ContactSelect.multiply(a, b);
-}
+export default {
+  pickContact: (
+    callback: (error: string | null, phoneNumber?: string) => void
+  ) => {
+    ContactSelect.pickContact(callback);
+  },
+};

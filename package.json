@@ -161,5 +161,9 @@
         }
       ]
     ]
+  },
+  "dependencies": {
+    "expo-contacts": "^12.8.2",
+    "expo-permissions": "^14.4.0"
   }
 }
