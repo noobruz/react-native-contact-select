@@ -6,8 +6,8 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const ContactSelect = NativeModules.ContactSelect
-  ? NativeModules.ContactSelect
+const ContactSelectModule = NativeModules.ContactSelectModule
+  ? NativeModules.ContactSelectModule
   : new Proxy(
       {},
       {
@@ -21,6 +21,6 @@ export default {
   pickContact: (
     callback: (error: string | null, phoneNumber?: string) => void
   ) => {
-    ContactSelect.pickContact(callback);
+    ContactSelectModule.pickContact(callback);
   },
 };

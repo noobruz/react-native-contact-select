@@ -30,5 +30,5 @@ target 'react-native-contact-select' do
   pod 'React/RCTVibration', :path => '../node_modules/react-native/Libraries/Vibration'
   pod 'React/RCTWebSocket', :path => '../node_modules/react-native/Libraries/WebSocket'
   
-  pod 'ContactSelect', :path => './'
+  pod 'ContactSelectModule', :path => './'
 end

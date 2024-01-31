@@ -1,6 +1,6 @@
-#import "ContactSelect-Bridging-Header.h"
+#import "ContactSelectModule-Bridging-Header.h"
 
-@implementation ContactSelect
+@implementation ContactSelectModule
 
 RCT_EXPORT_MODULE();
 

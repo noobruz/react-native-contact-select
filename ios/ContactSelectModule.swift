@@ -2,13 +2,13 @@ import Foundation
 import Contacts
 import React
 
-@objc(ContactSelect)
-class ContactSelect: NSObject, RCTBridgeModule, CNContactPickerDelegate {
+@objc(ContactSelectModule)
+class ContactSelectModule: NSObject, RCTBridgeModule, CNContactPickerDelegate {
 
   var contactSelectionCallback: RCTResponseSenderBlock?
 
   static func moduleName() -> String {
-    return "ContactSelect"
+    return "ContactSelectModule"
   }
 
   @objc func pickContact(_ callback: @escaping RCTResponseSenderBlock) {

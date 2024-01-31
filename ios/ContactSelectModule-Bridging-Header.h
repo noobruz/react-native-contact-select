@@ -1,3 +1,3 @@
 #import "React/RCTBridgeModule.h"
 #import "React/RCTEventEmitter.h"
-#import "ContactSelect-Swift.h"
+#import "ContactSelectModule-Swift.h"
