@@ -1,7 +1,7 @@
 {
-  "name": "react-native-contact-select",
+  "name": "@noobruz/react-native-contact-select",
   "version": "0.1.0",
-  "description": "A",
+  "description": "A simple react native contact selection library",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",
@@ -37,7 +37,10 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "contact select",
+    "contacts",
+    "phone numbers"
   ],
   "repository": {
     "type": "git",

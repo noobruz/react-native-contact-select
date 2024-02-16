@@ -1,19 +1,29 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
-import ContactModule from 'react-native-contact-select'; // Adjust the path accordingly
+import { View, Text, Button, PermissionsAndroid } from 'react-native';
+import ContactModule from 'react-native-contact-select';
 
 function ContactSelector() {
-  const handleContactSelection = (error: any, phoneNumber: any) => {
-    if (error) {
-      console.error(error);
+  const pickContact = async () => {
+    const granted = await PermissionsAndroid.request(
+      'android.permission.READ_CONTACTS',
+      {
+        title: 'Cool Contact App Contact Permission',
+        message: 'Cool Contact App  needs access to your contacts ',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      }
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      try {
+        const phone = await ContactModule.selectContact();
+        console.log('Selected phone number:', phone);
+      } catch (error) {
+        console.error(error);
+      }
     } else {
-      console.log('Selected phone number:', phoneNumber);
-      // Do something with the selected contact information
+      console.log('contact permission denied');
     }
-  };
-
-  const pickContact = () => {
-    ContactModule.pickContact(handleContactSelection);
   };
 
   return (

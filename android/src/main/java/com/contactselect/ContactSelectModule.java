@@ -16,26 +16,34 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 public class ContactSelectModule extends ReactContextBaseJavaModule {
-    private static final int CONTACT_REQUEST_CODE = 1;
+    private static final int PICK_CONTACT_REQUEST = 1;
     private Callback contactSelectionCallback;
 
     private final ActivityEventListener activityEventListener = new BaseActivityEventListener() {
         @Override
         public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-            if (requestCode == CONTACT_REQUEST_CODE) {
+            if (requestCode == PICK_CONTACT_REQUEST) {
                 if (resultCode == Activity.RESULT_OK) {
                     Uri contactUri = data.getData();
                     if (contactUri != null) {
-                        String[] projection = {ContactsContract.CommonDataKinds.Phone.NUMBER};
-                        Cursor cursor = activity.getContentResolver().query(contactUri, projection, null, null, null);
-                        if (cursor != null && cursor.moveToFirst()) {
-                            String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            contactSelectionCallback.invoke(null, phoneNumber);
-                            cursor.close();
+                        Cursor cursor = activity.getContentResolver().query(contactUri, null, null, null, null);
+                        if (cursor != null) {
+                            try {
+                                if (cursor.moveToFirst()) {
+                                    String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                                    String phoneNumber = getContactPhoneNumber(contactId);
+                                    contactSelectionCallback.invoke(null, phoneNumber);
+                                } else {
+                                    contactSelectionCallback.invoke("Contact details not found");
+                                }
+                            } finally {
+                                cursor.close();
+                            }
                         } else {
-                            contactSelectionCallback.invoke("Failed to retrieve contact");
+                            contactSelectionCallback.invoke("Failed to retrieve contact details");
                         }
                     } else {
                         contactSelectionCallback.invoke("Failed to retrieve contact");
@@ -64,7 +72,7 @@ public class ContactSelectModule extends ReactContextBaseJavaModule {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 ContextCompat.checkSelfPermission(getReactApplicationContext(), android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getCurrentActivity(), new String[]{android.Manifest.permission.READ_CONTACTS}, CONTACT_REQUEST_CODE);
+            ActivityCompat.requestPermissions(getCurrentActivity(), new String[]{android.Manifest.permission.READ_CONTACTS}, PICK_CONTACT_REQUEST);
         } else {
             openContactPicker();
         }
@@ -72,6 +80,27 @@ public class ContactSelectModule extends ReactContextBaseJavaModule {
 
     private void openContactPicker() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        getCurrentActivity().startActivityForResult(intent, CONTACT_REQUEST_CODE);
+        getCurrentActivity().startActivityForResult(intent, PICK_CONTACT_REQUEST);
+    }
+
+    private String getContactPhoneNumber(String contactId) {
+        Cursor cursor = getCurrentActivity().getContentResolver().query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null,
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                new String[]{contactId},
+                null
+        );
+
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return null;
     }
 }

@@ -1,2 +1,3 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<!-- <use-permission android:name="android.permission.READ_CONTACTS"> -->
 </manifest>

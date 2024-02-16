@@ -18,9 +18,15 @@ const ContactSelectModule = NativeModules.ContactSelectModule
     );
 
 export default {
-  pickContact: (
-    callback: (error: string | null, phoneNumber?: string) => void
-  ) => {
-    ContactSelectModule.pickContact(callback);
+  selectContact: () => {
+    return new Promise(async (resolve, reject) => {
+      ContactSelectModule.pickContact((error: string, number: string) => {
+        if (error) {
+          reject(error);
+        }
+
+        resolve(number);
+      });
+    });
   },
 };
